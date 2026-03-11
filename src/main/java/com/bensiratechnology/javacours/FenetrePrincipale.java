@@ -3,15 +3,14 @@ package com.bensiratechnology.javacours;
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import java.awt.Container;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
  * Classe représentant la Fenêtre Principale de l'application.
  * Implémente ActionListener pour gérer les événements de manière centralisée.
+ * Utilise FlowLayout pour l'agencement des boutons.
  * 
  * @author BenSira99
  */
@@ -25,14 +24,12 @@ public class FenetrePrincipale extends JFrame implements ActionListener {
         // Configuration de la fenêtre
         setTitle("Menu Principal");
         setSize(400, 300);
-        
-        // Utilisation d'un JContainer (Container) explicite
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        // Utilisation d'un JContainer (Container) explicite avec FlowLayout
         Container conteneurPrincipal = this.getContentPane();
-        conteneurPrincipal.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
-        gbc.gridx = 0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        conteneurPrincipal.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
 
         // Création des boutons
         boutonInformation = new JButton("Informations");
@@ -44,15 +41,10 @@ public class FenetrePrincipale extends JFrame implements ActionListener {
         boutonTraitement.addActionListener(this);
         boutonSortie.addActionListener(this);
 
-        // Ajout des boutons
-        gbc.gridy = 0;
-        conteneurPrincipal.add(boutonInformation, gbc);
-        
-        gbc.gridy = 1;
-        conteneurPrincipal.add(boutonTraitement, gbc);
-        
-        gbc.gridy = 2;
-        conteneurPrincipal.add(boutonSortie, gbc);
+        // Ajout des boutons directement au conteneur
+        conteneurPrincipal.add(boutonInformation);
+        conteneurPrincipal.add(boutonTraitement);
+        conteneurPrincipal.add(boutonSortie);
     }
 
     @Override
