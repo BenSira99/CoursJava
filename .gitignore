@@ -1,0 +1,65 @@
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.restore
+release.properties
+dependency-reduced-pom.xml
+build.number
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# IDEs
+.idea/
+*.iml
+*.iws
+.settings/
+.project
+.classpath
+.factorypath
+.vscode/
+
+# Compiled files
+*.class
+*.log
+*.ctxt
+
+# Packaging
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Global Rules BenSira99
+node_modules/
+__pycache__/
+*.pyc
+.env
+.env.local
+.env.production
+dist/
+build/
+.dart_tool/
+.flutter-plugins
+*.jks
+*.keystore
+venv/
+.venv/
+*.egg-info/
+*.db
+*.sqlite3
+coverage/
+.nyc_output/
+*.apk
+*.aab
+*.ipa
+docker-compose.override.yml
+secrets/
+*.pem
+*.key
+firebase-debug.log
+.firebase/
+supabase/.temp/
