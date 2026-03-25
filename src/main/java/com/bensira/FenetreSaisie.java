@@ -6,7 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Fenêtre de saisie pour l'ajout ou la modification d'une personne.
+ * Fenêtre de saisie standard sans couleurs personnalisées encombrantes.
  */
 public class FenetreSaisie extends JFrame implements ActionListener {
 
@@ -19,97 +19,63 @@ public class FenetreSaisie extends JFrame implements ActionListener {
     private final Personne personneAModifier;
     private final ServicePersonne service;
 
-    // Couleurs Teal
-    private final Color COULEUR_FOND = new Color(224, 242, 241);
-    private final Color COULEUR_TEXTE = new Color(0, 105, 92);
-    private final Color COULEUR_BOUTON = new Color(38, 166, 154);
-
     public FenetreSaisie(FenetrePrincipale parent, Personne personne) {
         this.parent = parent;
         this.personneAModifier = personne;
         this.service = new ServicePersonne();
-        boolean estModification = (personne != null);
+        boolean estModif = (personne != null);
 
-        setTitle(estModification ? "Modifier Collaborateur" : "Nouveau Collaborateur");
-        setSize(400, 300);
-        setResizable(false);
+        setTitle(estModif ? "Modifier Collaborateur" : "Nouveau Collaborateur");
+        setSize(400, 250);
         setLocationRelativeTo(parent);
-        getContentPane().setBackground(COULEUR_FOND);
-        setLayout(new GridLayout(4, 2, 10, 20));
+        setLayout(new GridLayout(4, 2, 10, 15));
 
-        // -- CHAMPS --
         champMatricule = new JTextField();
         champNom = new JTextField();
         champSalaire = new JTextField();
 
-        if (estModification) {
+        if (estModif) {
             champMatricule.setText(personne.obtenirMatricule());
-            champMatricule.setEditable(false); // On ne modifie pas la clé primaire
+            champMatricule.setEditable(false);
             champNom.setText(personne.obtenirNom());
             champSalaire.setText(String.valueOf(personne.obtenirSalaire()));
         }
 
-        ajouterComposant("Matricule :", champMatricule);
-        ajouterComposant("Nom Complet :", champNom);
-        ajouterComposant("Salaire (DH) :", champSalaire);
+        add(new JLabel("  Matricule :")); add(champMatricule);
+        add(new JLabel("  Nom :")); add(champNom);
+        add(new JLabel("  Salaire :")); add(champSalaire);
 
-        // -- BOUTONS --
-        boutonValider = new JButton(estModification ? "Modifier" : "Insérer");
+        boutonValider = new JButton(estModif ? "Enregistrer" : "Créer");
         boutonAnnuler = new JButton("Annuler");
 
-        configurerBouton(boutonValider, COULEUR_BOUTON);
-        configurerBouton(boutonAnnuler, Color.GRAY);
+        boutonValider.addActionListener(this);
+        boutonAnnuler.addActionListener(this);
 
         add(boutonValider);
         add(boutonAnnuler);
     }
 
-    private void ajouterComposant(String label, JTextField champ) {
-        JLabel lbl = new JLabel(label);
-        lbl.setForeground(COULEUR_TEXTE);
-        lbl.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        lbl.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
-        add(lbl);
-        add(champ);
-    }
-
-    private void configurerBouton(JButton b, Color c) {
-        b.setBackground(c);
-        b.setForeground(Color.WHITE);
-        b.setFocusPainted(false);
-        b.addActionListener(this);
-    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == boutonAnnuler) {
-            this.dispose();
+            dispose();
             return;
         }
 
         try {
-            String matricule = champMatricule.getText().trim();
-            String nom = champNom.getText().trim();
-            double salaire = Double.parseDouble(champSalaire.getText().trim());
+            Personne p = new Personne(
+                champMatricule.getText(),
+                champNom.getText(),
+                Double.parseDouble(champSalaire.getText())
+            );
 
-            if (matricule.isEmpty() || nom.isEmpty()) {
-                throw new Exception("Champs obligatoires vides.");
-            }
-
-            Personne p = new Personne(matricule, nom, salaire);
-            if (personneAModifier == null) {
-                service.ajouter(p);
-            } else {
-                service.modifier(p);
-            }
+            if (personneAModifier == null) service.ajouter(p);
+            else service.modifier(p);
 
             parent.rafraichirDonnees();
-            this.dispose();
-
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Salaire invalide.", "Erreur", JOptionPane.ERROR_MESSAGE);
+            dispose();
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Données invalides : " + ex.getMessage());
         }
     }
 }

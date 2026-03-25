@@ -6,7 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Fenêtre de notification pour les actions (Suppression, Succès).
+ * Fenêtre de notification simplifiée.
  */
 public class FenetreNotification extends JFrame implements ActionListener {
 
@@ -19,63 +19,46 @@ public class FenetreNotification extends JFrame implements ActionListener {
         this.personneConcernee = personne;
         this.service = new ServicePersonne();
 
-        setTitle(suppression ? "Confirmer la suppression" : "Information");
-        setSize(400, 200);
+        setTitle(suppression ? "Confirmer" : "Notification");
+        setSize(350, 150);
         setLocationRelativeTo(parent);
-        getContentPane().setBackground(new Color(224, 242, 241));
-        setLayout(new BorderLayout());
+        setLayout(new BorderLayout(10, 10));
 
-        JPanel panneauContenu = new JPanel(new GridBagLayout());
-        panneauContenu.setOpaque(false);
-        
         String message = suppression 
-            ? "Êtes-vous sûr de vouloir supprimer " + personne.obtenirNom() + " ?"
-            : "Le collaborateur " + personne.obtenirNom() + " a été supprimé.";
+            ? "Supprimer " + personne.obtenirNom() + " ?"
+            : "Suppression effectuée.";
         
-        JLabel lblMessage = new JLabel("<html><center>" + message + "</center></html>");
-        lblMessage.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        lblMessage.setForeground(new Color(0, 105, 92));
-        panneauContenu.add(lblMessage);
-        
-        add(panneauContenu, BorderLayout.CENTER);
+        JLabel lbl = new JLabel("<html><center>" + message + "</center></html>", SwingConstants.CENTER);
+        add(lbl, BorderLayout.CENTER);
 
-        JPanel panneauBoutons = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
-        panneauBoutons.setOpaque(false);
-
+        JPanel pnl = new JPanel(new FlowLayout());
         if (suppression) {
-            JButton boutonOui = creerBouton("Oui, Supprimer", new Color(211, 47, 47));
-            JButton boutonNon = creerBouton("Annuler", Color.GRAY);
-            panneauBoutons.add(boutonOui);
-            panneauBoutons.add(boutonNon);
+            JButton oui = new JButton("Oui, supprimer");
+            oui.setBackground(new Color(200, 0, 0));
+            oui.setForeground(Color.WHITE);
+            oui.addActionListener(this);
+            pnl.add(oui);
+            
+            JButton non = new JButton("Annuler");
+            non.addActionListener(this);
+            pnl.add(non);
         } else {
-            JButton boutonOk = creerBouton("OK", new Color(0, 121, 107));
-            panneauBoutons.add(boutonOk);
+            JButton ok = new JButton("OK");
+            ok.addActionListener(this);
+            pnl.add(ok);
         }
-
-        add(panneauBoutons, BorderLayout.SOUTH);
-    }
-
-    private JButton creerBouton(String texte, Color c) {
-        JButton b = new JButton(texte);
-        b.setBackground(c);
-        b.setForeground(Color.WHITE);
-        b.setFocusPainted(false);
-        b.addActionListener(this);
-        return b;
+        add(pnl, BorderLayout.SOUTH);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        String commande = e.getActionCommand();
-
-        if (commande.equals("Oui, Supprimer")) {
+        if (e.getActionCommand().equals("Oui, supprimer")) {
             service.supprimer(personneConcernee.obtenirMatricule());
             parent.rafraichirDonnees();
-            // On ferme cette fenêtre et on informe
-            this.dispose();
+            dispose();
             new FenetreNotification(parent, personneConcernee, false).setVisible(true);
         } else {
-            this.dispose();
+            dispose();
         }
     }
 }
