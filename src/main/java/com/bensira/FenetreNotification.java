@@ -12,13 +12,11 @@ public class FenetreNotification extends JFrame implements ActionListener {
 
     private final FenetrePrincipale parent;
     private final Personne personneConcernee;
-    private final boolean estSuppression;
     private final ServicePersonne service;
 
     public FenetreNotification(FenetrePrincipale parent, Personne personne, boolean suppression) {
         this.parent = parent;
         this.personneConcernee = personne;
-        this.estSuppression = suppression;
         this.service = new ServicePersonne();
 
         setTitle(suppression ? "Confirmer la suppression" : "Information");
