@@ -1,78 +1,163 @@
 package com.bensira;
 
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import java.awt.Container;
-import java.awt.FlowLayout;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 /**
- * Classe représentant la Fenêtre Principale de l'application.
- * Implémente ActionListener pour gérer les événements de manière centralisée.
- * Utilise FlowLayout pour l'agencement des boutons.
- * 
- * @author BenSira99
+ * Dashboard principal affichant la liste des personnes dans un tableau.
+ * Style : Teal (Sarcelle) léger.
  */
 public class FenetrePrincipale extends JFrame implements ActionListener {
 
-    private final JMenuItem elementInformation;
-    private final JMenuItem elementTraitement;
-    private final JMenuItem elementSortie;
+    private final JTable tableau;
+    private final DefaultTableModel modeleTableau;
+    private final JButton boutonAjouter;
+    private final JButton boutonModifier;
+    private final JButton boutonSupprimer;
+    private final JButton boutonQuitter;
+    private final ServicePersonne service;
+
+    // Couleurs Teal personnalisées
+    private final Color COULEUR_FOND = new Color(224, 242, 241); // Teal très léger
+    private final Color COULEUR_ENTETE = new Color(0, 121, 107); // Teal sombre
+    private final Color COULEUR_BOUTON = new Color(38, 166, 154); // Teal moyen
 
     public FenetrePrincipale() {
-        // Configuration de la fenêtre
-        setTitle("Menu Principal");
-        setSize(400, 300);
+        GestionnaireBaseDonnees.initialiser();
+        this.service = new ServicePersonne();
+
+        setTitle("Dashboard - Gestion des Personnes");
+        setSize(800, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        getContentPane().setBackground(COULEUR_FOND);
+        setLayout(new BorderLayout(10, 10));
 
-        // Utilisation d'un JContainer (Container) explicite avec FlowLayout
-        Container conteneurPrincipal = this.getContentPane();
-        conteneurPrincipal.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        // -- PANNEAU HAUT (Titre et Ajout) --
+        JPanel panneauHaut = new JPanel(new BorderLayout());
+        panneauHaut.setBackground(COULEUR_FOND);
+        panneauHaut.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Création de la barre de menus
-        JMenuBar barreMenus = new JMenuBar();
-        JMenu menuOptions = new JMenu("Options");
+        JLabel titre = new JLabel("Liste des Collaborateurs");
+        titre.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        titre.setForeground(COULEUR_ENTETE);
+        panneauHaut.add(titre, BorderLayout.WEST);
 
-        // Création des éléments de menu
-        elementInformation = new JMenuItem("Informations");
-        elementTraitement = new JMenuItem("Traitement");
-        elementSortie = new JMenuItem("Sortie");
+        boutonAjouter = creerBouton("Nouveau Collaborateur");
+        panneauHaut.add(boutonAjouter, BorderLayout.EAST);
+        add(panneauHaut, BorderLayout.NORTH);
 
-        // Enregistrement des écouteurs
-        elementInformation.addActionListener(this);
-        elementTraitement.addActionListener(this);
-        elementSortie.addActionListener(this);
+        // -- TABLEAU CENTRAL --
+        String[] colonnes = {"Matricule", "Nom Complet", "Salaire (DH)"};
+        modeleTableau = new DefaultTableModel(colonnes, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Lecture seule
+            }
+        };
+        tableau = new JTable(modeleTableau);
+        tableau.setRowHeight(25);
+        tableau.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tableau.getTableHeader().setBackground(COULEUR_ENTETE);
+        tableau.getTableHeader().setForeground(Color.WHITE);
+        tableau.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
+        
+        JScrollPane defileur = new JScrollPane(tableau);
+        defileur.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+        defileur.getViewport().setBackground(Color.WHITE);
+        add(defileur, BorderLayout.CENTER);
 
-        // Ajout des éléments au menu et de la barre à la fenêtre
-        menuOptions.add(elementInformation);
-        menuOptions.add(elementTraitement);
-        menuOptions.addSeparator();
-        menuOptions.add(elementSortie);
-        barreMenus.add(menuOptions);
-        setJMenuBar(barreMenus);
+        // -- PANNEAU BAS (Actions) --
+        JPanel panneauBas = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 10));
+        panneauBas.setBackground(COULEUR_FOND);
+
+        boutonModifier = creerBouton("Modifier");
+        boutonSupprimer = creerBouton("Supprimer");
+        boutonQuitter = new JButton("Quitter");
+        
+        configurerBoutonAction(boutonModifier);
+        configurerBoutonAction(boutonSupprimer);
+        configurerBoutonAction(boutonQuitter);
+        boutonQuitter.setBackground(new Color(200, 50, 50)); // Rouge léger pour quitter
+        boutonQuitter.setForeground(Color.WHITE);
+
+        panneauBas.add(boutonModifier);
+        panneauBas.add(boutonSupprimer);
+        panneauBas.add(boutonQuitter);
+        add(panneauBas, BorderLayout.SOUTH);
+
+        rafraichirDonnees();
+    }
+
+    private JButton creerBouton(String texte) {
+        JButton b = new JButton(texte);
+        b.setBackground(COULEUR_BOUTON);
+        b.setForeground(Color.WHITE);
+        b.setFocusPainted(false);
+        b.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        b.addActionListener(this);
+        return b;
+    }
+
+    private void configurerBoutonAction(JButton b) {
+        b.setPreferredSize(new Dimension(120, 35));
+        b.addActionListener(this);
+    }
+
+    public void rafraichirDonnees() {
+        modeleTableau.setRowCount(0);
+        List<Personne> liste = service.listerToutes();
+        for (Personne p : liste) {
+            Object[] ligne = {p.obtenirMatricule(), p.obtenirNom(), p.obtenirSalaire()};
+            modeleTableau.addRow(ligne);
+        }
+        
+        // Cacher les boutons si pas de données (selon demande utilisateur)
+        boolean aDesDonnees = !liste.isEmpty();
+        boutonModifier.setVisible(aDesDonnees);
+        boutonSupprimer.setVisible(aDesDonnees);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
 
-        if (source == elementInformation) {
-            new FenetreInformation(this).setVisible(true);
-            this.setVisible(false);
-        } else if (source == elementTraitement) {
-            new FenetreTraitement(this).setVisible(true);
-            this.setVisible(false);
-        } else if (source == elementSortie) {
+        if (source == boutonQuitter) {
             System.exit(0);
+        } else if (source == boutonAjouter) {
+            new FenetreSaisie(this, null).setVisible(true);
+        } else {
+            int ligneSelectionnee = tableau.getSelectedRow();
+            if (ligneSelectionnee == -1) {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une ligne.", "Attention", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            String matricule = (String) modeleTableau.getValueAt(ligneSelectionnee, 0);
+            String nom = (String) modeleTableau.getValueAt(ligneSelectionnee, 1);
+            double salaire = (double) modeleTableau.getValueAt(ligneSelectionnee, 2);
+            Personne selection = new Personne(matricule, nom, salaire);
+
+            if (source == boutonModifier) {
+                new FenetreSaisie(this, selection).setVisible(true);
+            } else if (source == boutonSupprimer) {
+                new FenetreNotification(this, selection, true).setVisible(true);
+            }
         }
     }
 
     public static void main(String[] args) {
-        FenetrePrincipale fenetre = new FenetrePrincipale();
-        fenetre.setVisible(true);
+        // Look and Feel pour un meilleur rendu
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception ignored) {}
+
+        SwingUtilities.invokeLater(() -> {
+            new FenetrePrincipale().setVisible(true);
+        });
     }
 }

@@ -34,6 +34,7 @@ build/
 
 ### VS Code ###
 .vscode/
+.agent/
 
 ### Mac OS ###
 .DS_Store
