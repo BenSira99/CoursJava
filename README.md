@@ -1,28 +1,23 @@
-# JavaStandard
+# Système de Gestion Scolaire
 
 ## 📋 Description
-Application Java Swing moderne pour la gestion des collaborateurs (Personnes) avec stockage persistant SQLite et style visuel Teal (Sarcelle). Elle implémente un tableau de bord complet pour les opérations CRUD.
-
+Application Java de gestion académique permettant de gérer les étudiants et les filières. Le système utilise une architecture simplifiée (AWT Container & Swing) et une persistance locale avec SQLite.
 
 ## 🚀 Fonctionnalités
-
-- **Dashboard Central** : Interface avec `JTable` pour visualiser tous les collaborateurs.
-- **Gestion SQLite** : Persistance des données (Nom, Matricule, Salaire) via JDBC.
-- **Insertion & Modification** : Fenêtres de saisie dédiées avec validation.
-- **Suppression Sécurisée** : Confirmation de suppression avec feedback utilisateur.
-- **Design Teal** : Palette de couleurs moderne intégrée directement dans les composants Swing.
-
+- **Gestion des Filières** : Création avec vérification d'existence (Code/Désignation).
+- **Gestion des Étudiants** : Inscription avec calcul de moyenne et association à une filière via `JComboBox`.
+- **Interface Dynamique** : Navigation par boutons dans la barre de menu et basculement manuel du ContentPane.
+- **Persistance SQLite** : Toutes les données sont stockées dans `personnes.db`.
 
 ## 🛠️ Stack Technique
+- **Langage** : Java 21+
+- **Interface** : AWT Container / Swing Components
+- **Base de Données** : SQLite JDBC Specialist
+- **Build System** : Maven
 
-- **Language**: Java 21
-- **Framework**: Swing (standard library)
-- **Build System**: Maven 3.9+
-- **Architecture**: MVC (Model-View-Controller) principles
-
-## 📦 Prerequis
-- JDK 21 or higher.
-- Maven installed.
+## 📦 Prérequis
+- Java JDK 21 ou supérieur.
+- Maven installé et configuré.
 
 ## ⚙️ Installation
 ```bash
@@ -30,32 +25,31 @@ git clone https://github.com/BenSira99/CoursJava.git
 cd JavaStandard
 ```
 
-## run Lancement
+## 🏃 Lancement
 ```bash
-mvn compile exec:java -Dexec.mainClass="com.bensira.FenetrePrincipale"
+mvn compile exec:java -Dexec.mainClass="com.bensira.FenetreScolarite"
 ```
 
 ## 🧪 Tests
-No unit tests implemented yet.
+Le programme de test principal se trouve dans `ApplicationScolarite.java`.
 
 ## 📁 Structure du Projet
 ```text
-JavaStandard/
-├── src/main/java/com/bensira/
-│   ├── FenetrePrincipale.java  (Main Entry)
-│   ├── FenetreInformation.java (Information window)
-│   ├── FenetreTraitement.java  (Processing window)
-│   └── Main.java               (Placeholder main)
-├── pom.xml                     (Maven Config)
-└── README.md                   (Documentation)
+src/main/java/com/bensira/
+├── FenetreScolarite.java        (Interface Principale)
+├── ServiceScolarite.java        (Logique Métier & SQL)
+├── GestionnaireBaseDonnees.java (Configuration SQLite)
+└── ApplicationScolarite.java    (Tests & Initialisation)
 ```
 
 ## 🔒 Sécurité
-- Code-level input validation (to be expanded).
-- Secure window disposal management.
+- Validation des entrées côté client.
+- Détection automatique des doublons de filières.
+- Gestion sécurisée des connexions JDBC.
 
 ## 📄 Licence
-Distributed under the MIT License. See `LICENSE` for more information.
+Ce projet est sous licence MIT.
 
 ## 👤 Auteur — BenSira99
+Ingénieur logiciel Senior Full-Stack.
 - GitHub: [@BenSira99](https://github.com/BenSira99)

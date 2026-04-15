@@ -1,0 +1,7 @@
+Une filiere contient des etudiant, chaque filiere est caractérisé par un code et une désignation
+chaque etudiant est caractérisé par un matricule et un nom et une moyenne générale
+chaque etudiant appartient a une filière.
+
+1- en deduire le diagramme de classe en mermaid
+2- créer un programme java qui permet d'insérer des filieres et etudiants
+3- 

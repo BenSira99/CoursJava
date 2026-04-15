@@ -1,41 +1,46 @@
+# Java Standard Project - Ben Sira standard
 target/
+build/
+bin/
+
+# Maven
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-.kotlin
-*.db
 
-### IntelliJ IDEA ###
-.idea/modules.xml
-.idea/jarRepositories.xml
-.idea/compiler.xml
-.idea/libraries/
+# Databases
+*.db
+*.sqlite3
+*.jks
+*.keystore
+
+# IDEs
+.idea/
+.vscode/
+.agent/
 *.iws
 *.iml
 *.ipr
-
-### Eclipse ###
-.apt_generated
+.settings/
 .classpath
-.factorypath
 .project
-.settings
-.springBeans
-.sts4-cache
+.factorypath
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
+# Environment & Logs
+.env
+.env.local
+.env.production
+*.log
+firebase-debug.log
+.firebase/
+secrets/
+*.pem
+*.key
 
-### VS Code ###
-.vscode/
-.agent/
-
-### Mac OS ###
+# OS
 .DS_Store
+Thumbs.db
+
+# Archives
+old_exercice_personnes/
+lib/
