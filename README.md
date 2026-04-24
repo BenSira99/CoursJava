@@ -1,18 +1,27 @@
 # Système de Gestion Scolaire
 
 ## 📋 Description
-Application Java de gestion académique permettant de gérer les étudiants et les filières. Le système utilise une architecture simplifiée (AWT Container & Swing) et une persistance locale avec SQLite.
+Application Java de gestion académique avancée permettant de piloter les étudiants et les filières. Le système utilise une architecture modulaire avec **Swing**, **CardLayout** et une persistance locale robuste via **SQLite**.
 
 ## 🚀 Fonctionnalités
-- **Gestion des Filières** : Création avec vérification d'existence (Code/Désignation).
-- **Gestion des Étudiants** : Inscription avec calcul de moyenne et association à une filière via `JComboBox`.
-- **Interface Dynamique** : Navigation par boutons dans la barre de menu et basculement manuel du ContentPane.
-- **Persistance SQLite** : Toutes les données sont stockées dans `personnes.db`.
+- **Gestion Complète des Filières** : 
+  - Création avec vérification d'unicité (Code/Désignation).
+  - Modification dynamique via sélection en liste déroulante.
+  - Suppression flexible (par Code ou par Désignation).
+- **Gestion des Étudiants** : 
+  - Inscription complète avec association aux filières existantes.
+  - Modification interactive avec chargement automatique des données.
+  - Suppression sécurisée avec confirmation (par Matricule ou par Nom).
+- **Interface Utilisateur Premium** : 
+  - Barre de menu (`JMenuBar`) professionnelle et hiérarchisée.
+  - Navigation fluide via `CardLayout`.
+  - Page d'accueil interactive.
+- **Persistance SQLite** : Gestion optimisée des données dans `personnes.db` avec protection contre l'écrasement au démarrage.
 
 ## 🛠️ Stack Technique
 - **Langage** : Java 21+
-- **Interface** : AWT Container / Swing Components
-- **Base de Données** : SQLite JDBC Specialist
+- **Interface** : Java Swing (CardLayout, JMenuBar)
+- **Base de Données** : SQLite JDBC Driver (3.45.1.0)
 - **Build System** : Maven
 
 ## 📦 Prérequis
@@ -31,21 +40,21 @@ mvn compile exec:java -Dexec.mainClass="com.bensira.FenetreScolarite"
 ```
 
 ## 🧪 Tests
-Le programme de test principal se trouve dans `ApplicationScolarite.java`.
+Les tests fonctionnels sont intégrés à l'interface graphique. La classe `GestionnaireBaseDonnees` assure l'intégrité des schémas.
 
 ## 📁 Structure du Projet
 ```text
 src/main/java/com/bensira/
-├── FenetreScolarite.java        (Interface Principale)
-├── ServiceScolarite.java        (Logique Métier & SQL)
-├── GestionnaireBaseDonnees.java (Configuration SQLite)
-└── ApplicationScolarite.java    (Tests & Initialisation)
+├── FenetreScolarite.java        (Interface Principale Swing)
+├── ServiceScolarite.java        (Logique Métier & Requêtes SQL)
+├── GestionnaireBaseDonnees.java (Moteur de Persistance SQLite)
+└── ApplicationScolarite.java    (Point d'entrée alternatif)
 ```
 
 ## 🔒 Sécurité
-- Validation des entrées côté client.
-- Détection automatique des doublons de filières.
-- Gestion sécurisée des connexions JDBC.
+- Prévention des doublons au niveau applicatif et base de données.
+- Boîtes de dialogue de confirmation pour les actions critiques.
+- Gestion des ressources JDBC avec try-with-resources.
 
 ## 📄 Licence
 Ce projet est sous licence MIT.
