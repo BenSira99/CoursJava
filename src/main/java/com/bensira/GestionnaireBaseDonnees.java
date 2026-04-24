@@ -44,21 +44,18 @@ public class GestionnaireBaseDonnees {
             instruction.execute(sqlCreationFilieres);
             instruction.execute(sqlCreationEtudiants);
 
-            // 3. Réinitialisation des données pour les tests
-            instruction.execute("DELETE FROM etudiants");
-            instruction.execute("DELETE FROM filieres");
-            instruction.execute("DELETE FROM personnes");
+            // 3. Insertion des données initiales (seulement si elles n'existent pas)
 
             // 4. Insertion des données initiales
-            instruction.execute("INSERT INTO personnes VALUES ('M001', 'Jean Dupont', 2500.0)");
-            instruction.execute("INSERT INTO personnes VALUES ('M002', 'Marie Curie', 3500.0)");
-            instruction.execute("INSERT INTO personnes VALUES ('M003', 'Pierre Martin', 2200.0)");
+            instruction.execute("INSERT OR IGNORE INTO personnes VALUES ('M001', 'Jean Dupont', 2500.0)");
+            instruction.execute("INSERT OR IGNORE INTO personnes VALUES ('M002', 'Marie Curie', 3500.0)");
+            instruction.execute("INSERT OR IGNORE INTO personnes VALUES ('M003', 'Pierre Martin', 2200.0)");
             
-            instruction.execute("INSERT INTO filieres VALUES ('INFO', 'Informatique')");
-            instruction.execute("INSERT INTO filieres VALUES ('GE', 'Génie Électrique')");
+            instruction.execute("INSERT OR IGNORE INTO filieres VALUES ('INFO', 'Informatique')");
+            instruction.execute("INSERT OR IGNORE INTO filieres VALUES ('GE', 'Génie Électrique')");
             
-            instruction.execute("INSERT INTO etudiants VALUES ('E001', 'Ben Sira', 18.5, 'INFO')");
-            instruction.execute("INSERT INTO etudiants VALUES ('E002', 'Alice Smith', 15.0, 'GE')");
+            instruction.execute("INSERT OR IGNORE INTO etudiants VALUES ('E001', 'Ben Sira', 18.5, 'INFO')");
+            instruction.execute("INSERT OR IGNORE INTO etudiants VALUES ('E002', 'Alice Smith', 15.0, 'GE')");
 
             System.out.println("Base de données SQLite initialisée avec succès.");
 
