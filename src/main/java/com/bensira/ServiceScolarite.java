@@ -180,6 +180,38 @@ public class ServiceScolarite {
         return noms;
     }
 
+    public boolean authentifierUtilisateur(String identifiant, String motDePasse) {
+        String sql = "SELECT * FROM utilisateurs WHERE identifiant = ? AND mot_de_passe = ?";
+        try (Connection connexion = GestionnaireBaseDonnees.obtenirConnexion();
+             PreparedStatement instruction = connexion.prepareStatement(sql)) {
+            
+            instruction.setString(1, identifiant);
+            instruction.setString(2, motDePasse);
+            
+            try (ResultSet rs = instruction.executeQuery()) {
+                return rs.next(); // Retourne vrai si un utilisateur correspond
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur d'authentification : " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean inscrireUtilisateur(String identifiant, String motDePasse) {
+        String sql = "INSERT INTO utilisateurs (identifiant, mot_de_passe) VALUES (?, ?)";
+        try (Connection connexion = GestionnaireBaseDonnees.obtenirConnexion();
+             PreparedStatement instruction = connexion.prepareStatement(sql)) {
+            
+            instruction.setString(1, identifiant);
+            instruction.setString(2, motDePasse);
+            
+            return instruction.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Erreur d'inscription : " + e.getMessage());
+            return false;
+        }
+    }
+
     private void executerUpdate(String sql, String message) {
         try (Connection connexion = GestionnaireBaseDonnees.obtenirConnexion();
              Statement instruction = connexion.createStatement()) {

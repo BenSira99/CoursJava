@@ -41,8 +41,6 @@ public class FenetreScolarite extends JFrame implements ActionListener {
     private final CardLayout cards = (CardLayout) pnlPrincipal.getLayout();
 
     public FenetreScolarite() {
-        GestionnaireBaseDonnees.initialiser();
-        
         setTitle("Système de Gestion Scolaire - Ben Sira");
         setSize(900, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -376,6 +374,6 @@ public class FenetreScolarite extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new FenetreScolarite().setVisible(true));
+        SwingUtilities.invokeLater(() -> new FenetreConnexion().setVisible(true));
     }
 }

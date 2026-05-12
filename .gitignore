@@ -2,6 +2,7 @@
 target/
 build/
 bin/
+.memory/*
 
 # Maven
 !.mvn/wrapper/maven-wrapper.jar

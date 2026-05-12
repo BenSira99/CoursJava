@@ -40,9 +40,14 @@ public class GestionnaireBaseDonnees {
                     "code_filiere TEXT NOT NULL," +
                     "FOREIGN KEY (code_filiere) REFERENCES filieres(code))";
 
+            String sqlCreationUtilisateurs = "CREATE TABLE IF NOT EXISTS utilisateurs (" +
+                    "identifiant TEXT PRIMARY KEY," +
+                    "mot_de_passe TEXT NOT NULL)";
+
             instruction.execute(sqlCreationPersonnes);
             instruction.execute(sqlCreationFilieres);
             instruction.execute(sqlCreationEtudiants);
+            instruction.execute(sqlCreationUtilisateurs);
 
             // 3. Insertion des données initiales (seulement si elles n'existent pas)
 
@@ -56,6 +61,7 @@ public class GestionnaireBaseDonnees {
             
             instruction.execute("INSERT OR IGNORE INTO etudiants VALUES ('E001', 'Ben Sira', 18.5, 'INFO')");
             instruction.execute("INSERT OR IGNORE INTO etudiants VALUES ('E002', 'Alice Smith', 15.0, 'GE')");
+            instruction.execute("INSERT OR IGNORE INTO utilisateurs VALUES ('admin', 'admin123')");
 
             System.out.println("Base de données SQLite initialisée avec succès.");
 
